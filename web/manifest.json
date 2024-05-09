@@ -1,6 +1,6 @@
 {
-    "name": "coffeeapp",
-    "short_name": "coffeeapp",
+    "name": "qr_code_scanner_and_generator_tutorial",
+    "short_name": "qr_code_scanner_and_generator_tutorial",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

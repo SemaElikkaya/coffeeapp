@@ -1,8 +1,8 @@
-import "package:coffeeapp/home_page.dart";
-import "package:flutter/material.dart";
+import 'package:flutter/material.dart';
+import 'package:coffeeapp2/home_page.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+  const LoginPage({Key? key}) : super(key: key);
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -12,6 +12,8 @@ class _LoginPageState extends State<LoginPage> {
   late String username;
   late String password;
   final _formKey = GlobalKey<FormState>();
+  bool _obscurePassword = true; // State for password visibility
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,17 +27,18 @@ class _LoginPageState extends State<LoginPage> {
             children: <Widget>[
               TextFormField(
                 decoration: const InputDecoration(
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.purple),
-                    ),
-                    labelText: "Kullanıcı Adı",
-                    labelStyle: TextStyle(color: Colors.purple),
-                    border: OutlineInputBorder()),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.purple),
+                  ),
+                  labelText: "Kullanıcı Adı",
+                  labelStyle: TextStyle(color: Colors.purple),
+                  border: OutlineInputBorder(),
+                ),
                 validator: (value) {
                   if (value == null || value.trim().isEmpty) {
                     return 'Kullanıcı Adınızı Giriniz';
                   } else {
-                    return null; // Geçerli durumu belirtmek için null döndürüyoruz.
+                    return null;
                   }
                 },
                 autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -45,23 +48,43 @@ class _LoginPageState extends State<LoginPage> {
               ),
               SizedBox(height: 10.0),
               TextFormField(
-                decoration: const InputDecoration(
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.purple),
+                decoration: InputDecoration(
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.purple),
+                  ),
+                  labelText: "Şifre",
+                  labelStyle: TextStyle(color: Colors.purple),
+                  border: OutlineInputBorder(),
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      // Toggle icon based on password visibility state
+                      _obscurePassword
+                          ? Icons.visibility_off
+                          : Icons.visibility,
                     ),
-                    labelText: "Şifre",
-                    labelStyle: TextStyle(color: Colors.purple),
-                    border: OutlineInputBorder()),
+                    onPressed: () {
+                      setState(() {
+                        _obscurePassword = !_obscurePassword;
+                      });
+                    },
+                  ),
+                ),
+                obscureText: _obscurePassword, // Hide/show password
                 validator: (value) {
                   if (value == null || value.trim().isEmpty) {
                     return 'Şifrenizi Giriniz';
                   } else {
-                    return null; // Geçerli durumu belirtmek için null döndürüyoruz.
+                    return null;
                   }
                 },
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 onSaved: (value) {
                   password = value!;
+                },
+                onChanged: (value) {
+                  setState(() {
+                    password = value;
+                  });
                 },
               ),
               Row(
@@ -90,29 +113,32 @@ class _LoginPageState extends State<LoginPage> {
         onPressed: () {
           if (_formKey.currentState!.validate()) {
             _formKey.currentState!.save();
-            if (username == "sema" && password == "a") {
+            if (username == "sema" && password == "esogu") {
               debugPrint("Giriş Başarılı!");
               Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => HomePage(
-                      username: username,
-                    ),
-                  ));
+                context,
+                MaterialPageRoute(
+                  builder: (context) => HomePage(
+                    username: username,
+                  ),
+                ),
+              );
             } else {
               showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      title: Text("Hata"),
-                      content: Text("Giriş Bilgileriniz Hatalı"),
-                      actions: <Widget>[
-                        MaterialButton(
-                            child: Text("Geri Dön"),
-                            onPressed: () => Navigator.pop(context))
-                      ],
-                    );
-                  });
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text("Hata"),
+                    content: Text("Giriş Bilgileriniz Hatalı"),
+                    actions: <Widget>[
+                      MaterialButton(
+                        child: Text("Geri Dön"),
+                        onPressed: () => Navigator.pop(context),
+                      )
+                    ],
+                  );
+                },
+              );
             }
           }
         },
