@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'payment_page.dart'; // Ödeme yap sayfasını import et
-import 'login_page.dart';
 import 'home_page.dart';
 
 class CartPage extends StatefulWidget {
