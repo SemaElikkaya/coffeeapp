@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'payment_page.dart'; // Ödeme yap sayfasını import et
+import 'login_page.dart';
+import 'home_page.dart';
 
 class CartPage extends StatefulWidget {
   final List<String> cartItems;
@@ -60,6 +63,13 @@ class _CartPageState extends State<CartPage> {
 
   @override
   Widget build(BuildContext context) {
+    double totalPrice = 0.0;
+    for (var item in widget.cartItems) {
+      final product =
+          _products.firstWhere((element) => element['name'] == item);
+      totalPrice += product['price'];
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Sepetim'),
@@ -94,45 +104,63 @@ class _CartPageState extends State<CartPage> {
           );
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Yeni ürün eklemek için bir dialog gösterelim
-          showDialog(
-            context: context,
-            builder: (context) {
-              String newItem = ''; // Yeni eklenen ürünü tutacak değişken
-              return AlertDialog(
-                title: Text('Ürün Ekle'),
-                content: TextField(
-                  // Yeni ürünü eklemek için bir text field
-                  onChanged: (value) {
-                    newItem = value; // Yeni ürünü al
-                  },
-                ),
-                actions: [
-                  TextButton(
-                    onPressed: () {
-                      Navigator.pop(context); // Dialog'ı kapat
-                    },
-                    child: Text('İptal'),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      if (newItem.isNotEmpty) {
-                        setState(() {
-                          widget.cartItems.add(newItem); // Ürünü sepete ekle
+      bottomNavigationBar: BottomAppBar(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Toplam: \$${totalPrice.toStringAsFixed(2)}',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              ElevatedButton(
+                onPressed: totalPrice > 0
+                    ? () {
+                        // Ödeme sayfasına git
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                PaymentPage(totalPrice: totalPrice),
+                          ),
+                        ).then((paymentSuccessful) {
+                          if (paymentSuccessful == true) {
+                            setState(() {
+                              widget.cartItems.clear(); // Sepeti temizle
+                            });
+                            showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                title: Text('Ödeme Başarılı'),
+                                content: Text(
+                                    'Ödemeniz başarıyla gerçekleşti. Anasayfaya yönlendiriliyorsunuz.'),
+                                actions: <Widget>[
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              HomePage(username: 'sema'),
+                                        ),
+                                      );
+                                    },
+                                    child: Text('Tamam'),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }
                         });
-                        Navigator.pop(context); // Dialog'ı kapat
                       }
-                    },
-                    child: Text('Ekle'),
-                  ),
-                ],
-              );
-            },
-          );
-        },
-        child: Icon(Icons.add),
+                    : null, // Sepet tutarı 0 ise buton etkisiz hale getirilir
+                child: Text('Ödeme Yap'),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

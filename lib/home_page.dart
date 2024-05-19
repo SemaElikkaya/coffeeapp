@@ -1,3 +1,4 @@
+import 'package:coffeeapp2/settings.dart';
 import 'package:flutter/material.dart';
 import 'login_page.dart';
 import 'promotion_page.dart';
@@ -46,7 +47,14 @@ class _HomePageState extends State<HomePage> {
             ),
             ListTile(
               title: Text('Ayarlar'),
-              onTap: () {},
+              onTap: () {
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => SettingsPage(
+                              username: widget.username,
+                            )));
+              },
             ),
             ListTile(
               title: Text('Çıkış Yap'),
