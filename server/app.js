@@ -6,6 +6,6 @@ const bodyParser = require('body-parser');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use('/users', userRoutes);
+app.use('/', userRoutes);
 
 module.exports = app;
