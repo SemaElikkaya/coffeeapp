@@ -66,12 +66,13 @@ exports.login = async (req, res) => {
     // Compare provided password with stored password
     if (user.password === password) {
       // If password matches
-      res.status(200).json({ message: 'Login successful', user });
+      res.status(200).json({ message: 'success'});
+      console.log(email, password);
     } else {
       // If password does not match
       return (
         res.status(401).json({ error: 'Invalid credentials' }),
-        console.log(password)
+        console.log(email, password)
       );
       
     }
