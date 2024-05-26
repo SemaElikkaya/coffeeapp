@@ -1,146 +1,146 @@
 import 'package:flutter/material.dart';
-import 'package:coffeeapp2/home_page.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert'; // Import for JSON decoding
+import 'home_page.dart'; // HomePage import
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: LoginPage(),
+    );
+  }
+}
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
-
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  _LoginPageState createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
-  late String username;
-  late String password;
-  final _formKey = GlobalKey<FormState>();
-  bool _obscurePassword = true; // State for password visibility
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  bool _isLoading = false;
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  Future<void> _login() async {
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      final response = await http.post(
+        Uri.parse('http://localhost:3000/login'), // Emülatör için localhost
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'email': _emailController.text,
+          'password': _passwordController.text,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        final responseBody = jsonDecode(response.body);
+        final username = responseBody['username']; // Kullanıcı adını al
+
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (context) => HomePage(username: username),
+          ),
+        );
+      } else {
+        final errorMessage = jsonDecode(response.body)['error'] ??
+            'Invalid username or password.';
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text('Login Failed'),
+            content: Text(errorMessage),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text('OK'),
+              ),
+            ],
+          ),
+        );
+      }
+    } catch (e) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text('Login Error'),
+          content:
+              Text('An unexpected error occurred. Please try again later.'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('OK'),
+            ),
+          ],
+        ),
+      );
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: Form(
-        key: _formKey,
-        child: Padding(
-          padding: const EdgeInsets.only(left: 20.0, right: 20.0),
+      appBar: AppBar(title: Text('Login')),
+      body: Padding(
+        padding: EdgeInsets.all(16.0),
+        child: Form(
+          key: _formKey,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               TextFormField(
-                decoration: const InputDecoration(
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.purple),
-                  ),
-                  labelText: "Kullanıcı Adı",
-                  labelStyle: TextStyle(color: Colors.purple),
-                  border: OutlineInputBorder(),
-                ),
+                controller: _emailController,
+                decoration: InputDecoration(labelText: 'Email'),
                 validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return 'Kullanıcı Adınızı Giriniz';
-                  } else {
-                    return null;
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your email';
                   }
-                },
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                onSaved: (value) {
-                  username = value!;
+                  return null;
                 },
               ),
-              SizedBox(height: 10.0),
               TextFormField(
-                decoration: InputDecoration(
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.purple),
-                  ),
-                  labelText: "Şifre",
-                  labelStyle: TextStyle(color: Colors.purple),
-                  border: OutlineInputBorder(),
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      // Toggle icon based on password visibility state
-                      _obscurePassword
-                          ? Icons.visibility_off
-                          : Icons.visibility,
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        _obscurePassword = !_obscurePassword;
-                      });
-                    },
-                  ),
-                ),
-                obscureText: _obscurePassword, // Hide/show password
+                controller: _passwordController,
+                decoration: InputDecoration(labelText: 'Password'),
+                obscureText: true,
                 validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return 'Şifrenizi Giriniz';
-                  } else {
-                    return null;
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your password';
                   }
-                },
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                onSaved: (value) {
-                  password = value!;
-                },
-                onChanged: (value) {
-                  setState(() {
-                    password = value;
-                  });
+                  return null;
                 },
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  MaterialButton(
-                    child: Text("Üye Ol"),
-                    onPressed: () {},
-                  ),
-                  MaterialButton(
-                    child: Text("Şifremi Unuttum"),
-                    onPressed: () {},
-                  ),
-                ],
-              ),
-              _loginButton()
+              SizedBox(height: 20),
+              _isLoading
+                  ? CircularProgressIndicator()
+                  : ElevatedButton(
+                      onPressed: _login,
+                      child: Text('Login'),
+                    ),
             ],
           ),
         ),
       ),
     );
   }
-
-  Widget _loginButton() => ElevatedButton(
-        child: Text("Giriş Yap"),
-        onPressed: () {
-          if (_formKey.currentState!.validate()) {
-            _formKey.currentState!.save();
-            if (username == "sema" && password == "esogu") {
-              debugPrint("Giriş Başarılı!");
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => HomePage(
-                    username: username,
-                  ),
-                ),
-              );
-            } else {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    title: Text("Hata"),
-                    content: Text("Giriş Bilgileriniz Hatalı"),
-                    actions: <Widget>[
-                      MaterialButton(
-                        child: Text("Geri Dön"),
-                        onPressed: () => Navigator.pop(context),
-                      )
-                    ],
-                  );
-                },
-              );
-            }
-          }
-        },
-      );
 }

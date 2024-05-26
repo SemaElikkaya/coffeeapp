@@ -40,6 +40,33 @@ exports.deleteUser = async (req, res) => {
     res.status(200).json({ message: 'User deleted successfully', user: result.rows[0] });
   } catch (error) {
     console.error('Error deleting user:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+exports.login = async (req, res) => {
+  const { email, password } = req.body;
+
+  if (!email || !password) {
+    return res.status(400).json({ error: 'Email and password are required' });
+  }
+
+  try {
+    const result = await pool.query('SELECT * FROM \"User\" WHERE email = $1', [email]);
+
+    if (result.rowCount === 0) {
+      return res.status(401).json({ error: 'Invalid credentials' });
+    }
+
+    const user = result.rows[0];
+
+    if (user.password === password) {
+      res.status(200).json({ message: 'success', username: user.name });
+    } else {
+      return res.status(401).json({ error: 'Invalid credentials' });
+    }
+  } catch (error) {
+    console.error('Error during login:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 };
