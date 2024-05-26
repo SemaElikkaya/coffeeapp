@@ -1,4 +1,4 @@
-import 'package:coffeeapp2/settings.dart';
+import 'package:coffeeapp/settings.dart';
 import 'package:flutter/material.dart';
 import 'login_page.dart';
 import 'promotion_page.dart';

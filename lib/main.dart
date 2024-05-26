@@ -1,4 +1,4 @@
-import 'package:coffeeapp2/components/theme_notifier.dart';
+import 'package:coffeeapp/components/theme_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'login_page.dart';
