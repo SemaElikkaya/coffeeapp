@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert'; // Import for JSON decoding
 import 'home_page.dart'; // HomePage import
+import 'login_stuff/sign_up.dart';
+import 'login_stuff/forgot_password.dart';
 
 void main() {
   runApp(MyApp());
@@ -38,7 +40,7 @@ class _LoginPageState extends State<LoginPage> {
 
     try {
       final response = await http.post(
-        Uri.parse('http://localhost:3000/login'), // Emülatör için localhost
+        Uri.parse('http://10.0.2.2:3000/login'), // Emülatör için localhost
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           'email': _emailController.text,
@@ -111,7 +113,7 @@ class _LoginPageState extends State<LoginPage> {
             children: <Widget>[
               TextFormField(
                 controller: _emailController,
-                decoration: InputDecoration(labelText: 'Email'),
+                decoration: InputDecoration(labelText: 'E-posta'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter your email';
@@ -121,7 +123,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
               TextFormField(
                 controller: _passwordController,
-                decoration: InputDecoration(labelText: 'Password'),
+                decoration: InputDecoration(labelText: 'Şifre'),
                 obscureText: true,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -133,9 +135,36 @@ class _LoginPageState extends State<LoginPage> {
               SizedBox(height: 20),
               _isLoading
                   ? CircularProgressIndicator()
-                  : ElevatedButton(
-                      onPressed: _login,
-                      child: Text('Login'),
+                  : Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => SignUpScreen(),
+                              ),
+                            );
+                          },
+                          child: Text('Üye Ol'),
+                        ),
+                        Spacer(),
+                        ElevatedButton(
+                          onPressed: _login,
+                          child: Text('Giriş Yap'),
+                        ),
+                        Spacer(),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => ForgotPasswordPage(),
+                              ),
+                            );
+                          },
+                          child: Text('Şifremi Unuttum'),
+                        ),
+                      ],
                     ),
             ],
           ),
