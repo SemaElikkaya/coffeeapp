@@ -1,4 +1,4 @@
-import 'package:coffeeapp2/settings.dart';
+import 'settings.dart';
 import 'package:flutter/material.dart';
 import 'login_page.dart';
 import 'promotion_page.dart';
@@ -99,8 +99,8 @@ class _HomePageState extends State<HomePage> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => CartPage(
-                                  cartItems: cartItems,
-                                ),
+                                    cartItems: cartItems,
+                                    username: widget.username),
                               ),
                             );
                           },
@@ -156,9 +156,8 @@ class _HomePageState extends State<HomePage> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => CartPage(
-            cartItems: cartItems,
-          ),
+          builder: (context) =>
+              CartPage(cartItems: cartItems, username: widget.username),
         ),
       ).then((_) {
         setState(() {

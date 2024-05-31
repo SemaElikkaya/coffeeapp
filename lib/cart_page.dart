@@ -4,8 +4,10 @@ import 'home_page.dart';
 
 class CartPage extends StatefulWidget {
   final List<String> cartItems;
+  final String username; // Username alanı eklendi
 
-  const CartPage({Key? key, required this.cartItems}) : super(key: key);
+  const CartPage({Key? key, required this.cartItems, required this.username})
+      : super(key: key); // Username ekleyerek constructor güncellendi
 
   @override
   _CartPageState createState() => _CartPageState();
@@ -141,8 +143,9 @@ class _CartPageState extends State<CartPage> {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) =>
-                                              HomePage(username: 'sema'),
+                                          builder: (context) => HomePage(
+                                              username: widget
+                                                  .username), // Dinamik username kullanımı
                                         ),
                                       );
                                     },

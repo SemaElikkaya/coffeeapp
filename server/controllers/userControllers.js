@@ -63,7 +63,7 @@ exports.login = async (req, res) => {
     if (user.password === password) {
       res.status(200).json({ message: 'success', username: user.name });
     } else {
-      return res.status(401).json({ error: 'Invalid credentials' });
+      return res.status(401).json({ error: 'Geçersiz kullanıcı!' });
     }
   } catch (error) {
     console.error('Error during login:', error);

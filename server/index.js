@@ -7,7 +7,7 @@ app.use((req, res, next) => {
 });
 
 let inactivityTimeout;
-const INACTIVITY_LIMIT = 5 * 60 * 1000;
+const INACTIVITY_LIMIT = 10 * 60 * 1000;
 
 function resetInactivityTimer() {
   if (inactivityTimeout) {
