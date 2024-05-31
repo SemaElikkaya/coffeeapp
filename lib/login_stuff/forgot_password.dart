@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'auth.dart';  // auth.dart dosyasını dahil edin
 
 class ForgotPasswordPage extends StatefulWidget {
   @override
@@ -23,7 +24,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
 
     try {
       final response = await http.post(
-        Uri.parse('http://10.0.2.2:3000/forgot_password'),
+        Uri.parse('http://localhost:3000/password/forgot'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           'email': _emailController.text,
@@ -35,12 +36,17 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           context: context,
           builder: (context) => AlertDialog(
             title: Text('Success'),
-            content: Text(
-                'Password reset instructions have been sent to your email.'),
+            content: Text('Kimlik doğrulama sayfasına yönlendiriliyorsunuz.'),
             actions: <Widget>[
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pop();
+                  // Kimlik doğrulama sayfasına yönlendir
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                      builder: (context) => AuthPage(email: _emailController.text),
+                    ),
+                  );
                 },
                 child: Text('OK'),
               ),
@@ -48,8 +54,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           ),
         );
       } else {
-        final errorMessage = jsonDecode(response.body)['error'] ??
-            'Failed to send reset instructions.';
+        final errorMessage = jsonDecode(response.body)['error'] ?? 'Failed to send reset instructions.';
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
@@ -71,8 +76,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
         context: context,
         builder: (context) => AlertDialog(
           title: Text('Error'),
-          content:
-              Text('An unexpected error occurred. Please try again later.'),
+          content: Text('An unexpected error occurred. Please try again later.'),
           actions: <Widget>[
             TextButton(
               onPressed: () {
@@ -106,7 +110,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                 decoration: InputDecoration(labelText: 'E-posta'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter your email';
+                    return 'Lütfen Kayıt Olduğunuz Mail Adresini Girin';
                   }
                   return null;
                 },
@@ -116,7 +120,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                   ? CircularProgressIndicator()
                   : ElevatedButton(
                       onPressed: _resetPassword,
-                      child: Text('Şifre Sıfırlama İsteği Gönder'),
+                      child: Text('Kimlik Doğrulama Adımına Geç'),
                     ),
             ],
           ),

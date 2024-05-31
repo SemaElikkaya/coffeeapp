@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 void main() {
   runApp(MyApp());
@@ -31,6 +33,78 @@ class _SignUpScreenState extends State<SignUpScreen> {
   String _phone = '';
   String _securityQuestion = '';
   String _securityAnswer = '';
+  bool _isLoading = false;
+
+  Future<void> _signUp() async {
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
+
+    _formKey.currentState!.save();
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      final response = await http.post(
+        Uri.parse('http://localhost:3000/user/set'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'name': _firstName,
+          'lastname': _lastName,
+          'email': _email,
+          'phone_number': _phone,
+          'password': _password,
+          'security_question': _securityAnswer,
+        }),
+      );
+
+      if (response.statusCode == 201) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Kayıt başarılı!')));
+        Navigator.of(context).pop(); // Giriş sayfasına dön
+      } else {
+        final errorMessage = jsonDecode(response.body)['error'] ??
+            'Kayıt işlemi başarısız oldu.';
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text('Kayıt Başarısız'),
+            content: Text(errorMessage),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text('Tamam'),
+              ),
+            ],
+          ),
+        );
+      }
+    } catch (e) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text('Kayıt Hatası'),
+          content: Text('Beklenmeyen bir hata oluştu. Lütfen daha sonra tekrar deneyin.'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Tamam'),
+            ),
+          ],
+        ),
+      );
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -133,8 +207,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 },
               ),
               TextFormField(
-                decoration:
-                    InputDecoration(labelText: 'Güvenlik Sorusu Cevabı'),
+                decoration: InputDecoration(labelText: 'Güvenlik Sorusu Cevabı'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Lütfen güvenlik sorusunun cevabını girin';
@@ -146,17 +219,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 },
               ),
               SizedBox(height: 20.0),
-              ElevatedButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    _formKey.currentState!.save();
-                    // Burada kullanıcı bilgilerini işleyebilir veya kaydedebilirsiniz
-                    ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Kayıt başarılı!')));
-                  }
-                },
-                child: Text('Üye Ol'),
-              ),
+              _isLoading
+                  ? CircularProgressIndicator()
+                  : ElevatedButton(
+                      onPressed: _signUp,
+                      child: Text('Üye Ol'),
+                    ),
             ],
           ),
         ),
