@@ -7,6 +7,7 @@ router.post('/user/set', userController.setUser);
 router.delete('/user/delete/:id', userController.deleteUser);
 router.post('/login', userController.login);
 router.post('/password/forgot', userController.forgotPassword);
-router.post('/verify+identity', userController.verifyIdentity);
+router.post('/verify', userController.verifyIdentity);
+router.put('/password/reset', userController.resetPassword);
 
 module.exports = router;

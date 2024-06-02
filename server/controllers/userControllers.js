@@ -116,3 +116,24 @@ exports.verifyIdentity = async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
+exports.resetPassword = async (req, res) => {
+  const { email, new_password } = req.body;
+
+  if (!email || !new_password) {
+    return res.status(400).json({ error: 'Email and new password are required' });
+  }
+
+  try {
+    const result = await pool.query('UPDATE "User" SET password = $1 WHERE email = $2 RETURNING *', [new_password, email]);
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    res.status(200).json({ message: 'Password successfully updated', user: result.rows[0] });
+  } catch (error) {
+    console.error('Error updating password:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};

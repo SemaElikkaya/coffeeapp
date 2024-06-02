@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'reset_password.dart';
 
 class AuthPage extends StatefulWidget {
   final String email;
@@ -31,12 +32,11 @@ class _AuthPageState extends State<AuthPage> {
 
     try {
       final response = await http.post(
-        Uri.parse('http://localhost:3000/verify_identity'),
+        Uri.parse('http://localhost:3000/verify'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           'email': widget.email,
           'phone_number': _phoneNumber,
-          'security_question': _securityQuestion,
           'security_answer': _securityAnswer,
         }),
       );
@@ -44,7 +44,13 @@ class _AuthPageState extends State<AuthPage> {
       if (response.statusCode == 200) {
         ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text('Kimlik doğrulama başarılı!')));
-        // Başarılı doğrulamadan sonra yapılacak işlemler
+        // Kimlik doğrulama başarılıysa, yeni şifre belirleme sayfasına yönlendirilir
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ResetPasswordPage(username: widget.email),
+          ),
+        );
       } else {
         final errorMessage = jsonDecode(response.body)['error'] ?? 'Kimlik doğrulama başarısız oldu.';
         showDialog(
