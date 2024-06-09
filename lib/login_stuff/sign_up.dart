@@ -48,6 +48,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
     try {
       final response = await http.post(
+        Uri.parse('http://localhost:3000/user/set'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           'name': _firstName,
