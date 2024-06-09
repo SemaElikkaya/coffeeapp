@@ -49,7 +49,9 @@ class _MyTabControllerState extends State<MyTabController> {
       padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       child: Text(
         text,
-        style: TextStyle(fontSize: 15.0),
+        style: TextStyle(fontSize: 14.0),
+        overflow: TextOverflow.ellipsis,
+        softWrap: false,
       ),
     );
   }
@@ -83,7 +85,25 @@ class HotCoffeeList extends StatelessWidget {
           price: 4.49,
           onItemAddedToCart: onItemAddedToCart,
         ),
-        // Add more coffee items as needed
+        // Additional items
+        CoffeeItem(
+          name: 'Mocha',
+          image: 'assets/images/mocha.png',
+          price: 5.49,
+          onItemAddedToCart: onItemAddedToCart,
+        ),
+        CoffeeItem(
+          name: 'Flat White',
+          image: 'assets/images/flat_white.png',
+          price: 4.99,
+          onItemAddedToCart: onItemAddedToCart,
+        ),
+        CoffeeItem(
+          name: 'Macchiato',
+          image: 'assets/images/macchiato.png',
+          price: 3.99,
+          onItemAddedToCart: onItemAddedToCart,
+        ),
       ],
     );
   }
@@ -117,7 +137,25 @@ class ColdCoffeeList extends StatelessWidget {
           price: 6.49,
           onItemAddedToCart: onItemAddedToCart,
         ),
-        // Add more cold coffee items as needed
+        // Additional items
+        CoffeeItem(
+          name: 'Cold Brew',
+          image: 'assets/images/cold_brew.png',
+          price: 4.49,
+          onItemAddedToCart: onItemAddedToCart,
+        ),
+        CoffeeItem(
+          name: 'Iced Mocha',
+          image: 'assets/images/iced_mocha.png',
+          price: 5.99,
+          onItemAddedToCart: onItemAddedToCart,
+        ),
+        CoffeeItem(
+          name: 'Iced Cappuccino',
+          image: 'assets/images/iced_cappuccino.png',
+          price: 4.99,
+          onItemAddedToCart: onItemAddedToCart,
+        ),
       ],
     );
   }
@@ -151,7 +189,25 @@ class FoodList extends StatelessWidget {
           price: 2.49,
           onItemAddedToCart: onItemAddedToCart,
         ),
-        // Add more food items as needed
+        // Additional items
+        CoffeeItem(
+          name: 'Croissant',
+          image: 'assets/images/croissant.png',
+          price: 3.49,
+          onItemAddedToCart: onItemAddedToCart,
+        ),
+        CoffeeItem(
+          name: 'Bagel',
+          image: 'assets/images/bagel.png',
+          price: 2.99,
+          onItemAddedToCart: onItemAddedToCart,
+        ),
+        CoffeeItem(
+          name: 'Muffin',
+          image: 'assets/images/muffin.png',
+          price: 3.99,
+          onItemAddedToCart: onItemAddedToCart,
+        ),
       ],
     );
   }

@@ -25,7 +25,6 @@ class _ProfilePageState extends State<ProfilePage> {
   void fetchUserData() async {
     try {
       final response = await http
-          .get(Uri.parse('http://10.0.2.2:3000/user/${widget.useremail}'));
 
       if (response.statusCode == 200) {
         var data = json.decode(response.body);
@@ -58,7 +57,6 @@ class _ProfilePageState extends State<ProfilePage> {
 
     try {
       final response = await http.put(
-        Uri.parse('http://10.0.2.2:3000/user/update'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },

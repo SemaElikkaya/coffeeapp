@@ -32,7 +32,6 @@ class _AuthPageState extends State<AuthPage> {
 
     try {
       final response = await http.post(
-        Uri.parse('http://10.0.2.2:3000/verify'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           'email': widget.email,

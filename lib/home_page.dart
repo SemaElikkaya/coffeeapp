@@ -18,7 +18,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
-  List<String> cartItems = []; // Sepet içeriği listesi
+  List<String> cartItems = [];
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +37,7 @@ class _HomePageState extends State<HomePage> {
                 accountEmail: Text(widget.useremail),
                 currentAccountPicture: CircleAvatar(
                   backgroundImage: AssetImage(
-                      'assets/images/profile.jpg'), // Profil resmi için bir resim ekleyin
+                      'assets/images/profile.jpg'),
                 ),
                 decoration: BoxDecoration(
                   color: Colors.brown,
@@ -88,22 +88,10 @@ class _HomePageState extends State<HomePage> {
       body: Column(
         children: [
           Expanded(
-            flex: 1,
-            child: Container(
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage('assets/images/coffee.jpg'),
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-          ),
-          Expanded(
-            flex: 2,
             child: MyTabController(
               onItemAddedToCart: (itemName) {
                 setState(() {
-                  cartItems.add(itemName); // Ürünü sepete ekle
+                  cartItems.add(itemName);
                 });
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
@@ -138,7 +126,7 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
         ],
-      ), // TabController kullanılan widget
+      ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
@@ -172,7 +160,7 @@ class _HomePageState extends State<HomePage> {
         MaterialPageRoute(builder: (context) => PromotionPage()),
       ).then((_) {
         setState(() {
-          _selectedIndex = 0; // Anasayfa seçeneğine geri dön
+          _selectedIndex = 0;
         });
       });
     } else if (index == 2) {
@@ -187,7 +175,7 @@ class _HomePageState extends State<HomePage> {
         ),
       ).then((_) {
         setState(() {
-          _selectedIndex = 0; // Anasayfa seçeneğine geri dön
+          _selectedIndex = 0;
         });
       });
     }
