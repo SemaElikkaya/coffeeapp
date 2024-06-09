@@ -40,7 +40,7 @@ class _LoginPageState extends State<LoginPage> {
 
     try {
       final response = await http.post(
-        Uri.parse('http://localhost:3000/login'), // Emülatör için localhost
+        Uri.parse('http://10.0.2.2:3000/login'), // Emülatör için localhost
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           'email': _emailController.text,
@@ -103,7 +103,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Login')),
+      appBar: AppBar(),
       body: Padding(
         padding: EdgeInsets.all(16.0),
         child: Form(
@@ -113,59 +113,97 @@ class _LoginPageState extends State<LoginPage> {
             children: <Widget>[
               TextFormField(
                 controller: _emailController,
-                decoration: InputDecoration(labelText: 'E-posta'),
+                decoration: InputDecoration(
+                  labelText: 'E-posta',
+                  prefixIcon: Icon(Icons.email),
+                ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter your email';
+                    return 'Lütfen e-posta adresinizi giriniz';
                   }
                   return null;
                 },
               ),
               TextFormField(
                 controller: _passwordController,
-                decoration: InputDecoration(labelText: 'Şifre'),
+                decoration: InputDecoration(
+                  labelText: 'Şifre',
+                  prefixIcon: Icon(Icons.lock),
+                ),
                 obscureText: true,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter your password';
+                    return 'Lütfen şifrenizi giriniz';
                   }
                   return null;
                 },
               ),
-              SizedBox(height: 20),
+              Align(
+                alignment: Alignment.centerRight,
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => ForgotPasswordPage(),
+                      ),
+                    );
+                  },
+                  child: Text('Şifremi Unuttum?'),
+                  style: TextButton.styleFrom(
+                    foregroundColor: Colors.brown, // Metin rengi
+                  ),
+                ),
+              ),
+              SizedBox(height: 30), // Araya biraz boşluk ekleyin
               _isLoading
                   ? CircularProgressIndicator()
-                  : Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => SignUpScreen(),
-                              ),
-                            );
-                          },
-                          child: Text('Üye Ol'),
-                        ),
-                        Spacer(),
-                        ElevatedButton(
-                          onPressed: _login,
-                          child: Text('Giriş Yap'),
-                        ),
-                        Spacer(),
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => ForgotPasswordPage(),
-                              ),
-                            );
-                          },
-                          child: Text('Şifremi Unuttum'),
-                        ),
-                      ],
+                  : ElevatedButton(
+                      onPressed: _login,
+                      child: Text('Giriş Yap'),
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.brown,
+                          foregroundColor: Color(0xFFF8F4E1),
+                          minimumSize: Size(300, 50)),
                     ),
+              SizedBox(height: 50),
+              Row(
+                children: [
+                  Expanded(
+                    child: Divider(
+                      thickness: 1,
+                      color: Colors.brown,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    child: Text(
+                      'Üye değil misin?',
+                      style: TextStyle(color: Colors.brown),
+                    ),
+                  ),
+                  Expanded(
+                    child: Divider(
+                      thickness: 1,
+                      color: Colors.brown,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 30),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => SignUpScreen(),
+                    ),
+                  );
+                },
+                child: Text('Üye Ol!'),
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.brown,
+                    foregroundColor: Color(0xFFF8F4E1),
+                    minimumSize: Size(100, 35)),
+              ),
             ],
           ),
         ),

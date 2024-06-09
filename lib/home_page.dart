@@ -1,6 +1,7 @@
+import 'package:coffeeapp/profile_page.dart';
 import 'package:coffeeapp/settings.dart';
 import 'package:flutter/material.dart';
-import 'login_page.dart';
+import 'package:coffeeapp/login_page.dart';
 import 'promotion_page.dart';
 import 'cart_page.dart';
 import 'components/tab_controller.dart';
@@ -21,51 +22,63 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        // ignore: unnecessary_null_comparison
-        title: Text(widget.username == null
-            ? "Kullanıcı Yok"
-            : "Hoşgeldin " + widget.username + " !"),
+        title: Text("Hoşgeldin " + widget.username + " !"),
       ),
       drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            Container(
-              color: Colors.blue,
-              padding: EdgeInsets.fromLTRB(16, 40, 16, 16),
-              child: Text(
-                'Menü',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 24,
+        child: Container(
+          color: Color.fromARGB(255, 253, 246, 229).withOpacity(0.5),
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: <Widget>[
+              UserAccountsDrawerHeader(
+                accountName: Text(widget.username),
+                accountEmail: Text(widget.username),
+                currentAccountPicture: CircleAvatar(
+                  backgroundImage: AssetImage(
+                      'assets/images/profile.jpg'), // Profil resmi için bir resim ekleyin
+                ),
+                decoration: BoxDecoration(
+                  color: Colors.brown,
                 ),
               ),
-            ),
-            ListTile(
-              title: Text('Profil'),
-              onTap: () {},
-            ),
-            ListTile(
-              title: Text('Ayarlar'),
-              onTap: () {
-                Navigator.pushReplacement(
+              ListTile(
+                leading: Icon(Icons.person, color: Colors.brown),
+                title: Text('Profil'),
+                onTap: () {
+                  Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => SettingsPage(
-                              username: widget.username,
-                            )));
-              },
-            ),
-            ListTile(
-              title: Text('Çıkış Yap'),
-              onTap: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => LoginPage()),
-                );
-              },
-            ),
-          ],
+                      builder: (context) => ProfilePage(
+                        email: widget.username,
+                      ),
+                    ),
+                  );
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.settings, color: Colors.brown),
+                title: Text('Ayarlar'),
+                onTap: () {
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => SettingsPage(
+                                username: widget.username,
+                              )));
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.logout, color: Colors.brown),
+                title: Text('Çıkış Yap'),
+                onTap: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => LoginPage()),
+                  );
+                },
+              ),
+            ],
+          ),
         ),
       ),
       body: Column(
@@ -90,9 +103,12 @@ class _HomePageState extends State<HomePage> {
                 });
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
+                    backgroundColor: Colors.brown.withOpacity(0.8),
                     content: Row(
                       children: [
-                        Expanded(child: Text('$itemName sepete eklendi')),
+                        Expanded(
+                            child: Text('$itemName sepete eklendi',
+                                style: TextStyle(color: Color(0xFFFFF2D7)))),
                         TextButton(
                           onPressed: () {
                             Navigator.push(
@@ -100,11 +116,13 @@ class _HomePageState extends State<HomePage> {
                               MaterialPageRoute(
                                 builder: (context) => CartPage(
                                   cartItems: cartItems,
+                                  username: widget.username,
                                 ),
                               ),
                             );
                           },
-                          child: Text('Sepete Git'),
+                          child: Text('Sepete Git',
+                              style: TextStyle(color: Color(0xFFFFF2D7))),
                         ),
                       ],
                     ),
@@ -131,7 +149,7 @@ class _HomePageState extends State<HomePage> {
             label: 'Sepetim',
           ),
         ],
-        selectedItemColor: Colors.blue,
+        selectedItemColor: Colors.brown,
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
       ),
@@ -158,6 +176,7 @@ class _HomePageState extends State<HomePage> {
         MaterialPageRoute(
           builder: (context) => CartPage(
             cartItems: cartItems,
+            username: widget.username,
           ),
         ),
       ).then((_) {

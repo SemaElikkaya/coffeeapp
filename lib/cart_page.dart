@@ -4,8 +4,10 @@ import 'home_page.dart';
 
 class CartPage extends StatefulWidget {
   final List<String> cartItems;
+  final String username;
 
-  const CartPage({Key? key, required this.cartItems}) : super(key: key);
+  const CartPage({Key? key, required this.cartItems, required this.username})
+      : super(key: key);
 
   @override
   _CartPageState createState() => _CartPageState();
@@ -114,6 +116,10 @@ class _CartPageState extends State<CartPage> {
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor:
+                      Colors.brown, // Arka plan rengini kahverengi yap
+                ),
                 onPressed: totalPrice > 0
                     ? () {
                         // Ödeme sayfasına git
@@ -131,6 +137,7 @@ class _CartPageState extends State<CartPage> {
                             showDialog(
                               context: context,
                               builder: (context) => AlertDialog(
+                                backgroundColor: Color(0xFFFFF2D7),
                                 title: Text('Ödeme Başarılı'),
                                 content: Text(
                                     'Ödemeniz başarıyla gerçekleşti. Anasayfaya yönlendiriliyorsunuz.'),
@@ -141,12 +148,14 @@ class _CartPageState extends State<CartPage> {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) =>
-                                              HomePage(username: 'sema'),
+                                          builder: (context) => HomePage(
+                                              username: widget.username),
                                         ),
                                       );
                                     },
                                     child: Text('Tamam'),
+                                    style: TextButton.styleFrom(
+                                        foregroundColor: Colors.brown),
                                   ),
                                 ],
                               ),
@@ -155,7 +164,8 @@ class _CartPageState extends State<CartPage> {
                         });
                       }
                     : null, // Sepet tutarı 0 ise buton etkisiz hale getirilir
-                child: Text('Ödeme Yap'),
+                child: Text('Ödeme Yap',
+                    style: TextStyle(color: Color(0xFFF8F4E1))),
               ),
             ],
           ),

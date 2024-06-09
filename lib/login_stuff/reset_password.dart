@@ -30,7 +30,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
 
     try {
       final response = await http.put(
-        Uri.parse('http://localhost:3000/password/reset'),
+        Uri.parse('http://10.0.2.2:3000/password/reset'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           'email': widget.username,
@@ -39,15 +39,21 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
       );
 
       if (response.statusCode == 200) {
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Şifre başarıyla değiştirildi!')));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(
+            'Şifre başarıyla değiştirildi!',
+            style: TextStyle(color: Color(0xFFFFF2D7)),
+          ),
+          backgroundColor: Colors.brown.withOpacity(0.6),
+        ));
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => LoginPage()),
           (Route<dynamic> route) => false,
         );
       } else {
-        final errorMessage = jsonDecode(response.body)['error'] ?? 'Şifre değiştirme başarısız oldu.';
+        final errorMessage = jsonDecode(response.body)['error'] ??
+            'Şifre değiştirme başarısız oldu.';
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
@@ -69,7 +75,8 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
         context: context,
         builder: (context) => AlertDialog(
           title: Text('Şifre Değiştirme Hatası'),
-          content: Text('Beklenmeyen bir hata oluştu. Lütfen daha sonra tekrar deneyin.'),
+          content: Text(
+              'Beklenmeyen bir hata oluştu. Lütfen daha sonra tekrar deneyin.'),
           actions: <Widget>[
             TextButton(
               onPressed: () {
@@ -115,6 +122,9 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
               _isLoading
                   ? CircularProgressIndicator()
                   : ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.brown,
+                          foregroundColor: Color(0xFFF8F4E1)),
                       onPressed: _resetPassword,
                       child: Text('Şifreyi Değiştir'),
                     ),

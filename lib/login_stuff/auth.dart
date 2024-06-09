@@ -32,7 +32,7 @@ class _AuthPageState extends State<AuthPage> {
 
     try {
       final response = await http.post(
-        Uri.parse('http://localhost:3000/verify'),
+        Uri.parse('http://10.0.2.2:3000/verify'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           'email': widget.email,
@@ -42,9 +42,14 @@ class _AuthPageState extends State<AuthPage> {
       );
 
       if (response.statusCode == 200) {
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Kimlik doğrulama başarılı!')));
-        // Kimlik doğrulama başarılıysa, yeni şifre belirleme sayfasına yönlendirilir
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(
+            'Kimlik doğrulama başarılı!',
+            style: TextStyle(color: Color(0xFFFFF2D7)),
+          ),
+          backgroundColor: Colors.brown.withOpacity(0.6),
+        ));
+
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -52,7 +57,8 @@ class _AuthPageState extends State<AuthPage> {
           ),
         );
       } else {
-        final errorMessage = jsonDecode(response.body)['error'] ?? 'Kimlik doğrulama başarısız oldu.';
+        final errorMessage = jsonDecode(response.body)['error'] ??
+            'Kimlik doğrulama başarısız oldu.';
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
@@ -74,7 +80,8 @@ class _AuthPageState extends State<AuthPage> {
         context: context,
         builder: (context) => AlertDialog(
           title: Text('Doğrulama Hatası'),
-          content: Text('Beklenmeyen bir hata oluştu. Lütfen daha sonra tekrar deneyin.'),
+          content: Text(
+              'Beklenmeyen bir hata oluştu. Lütfen daha sonra tekrar deneyin.'),
           actions: <Widget>[
             TextButton(
               onPressed: () {
@@ -146,7 +153,8 @@ class _AuthPageState extends State<AuthPage> {
                 },
               ),
               TextFormField(
-                decoration: InputDecoration(labelText: 'Güvenlik Sorusu Cevabı'),
+                decoration:
+                    InputDecoration(labelText: 'Güvenlik Sorusu Cevabı'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Lütfen güvenlik sorusunun cevabını girin';
@@ -161,6 +169,9 @@ class _AuthPageState extends State<AuthPage> {
               _isLoading
                   ? CircularProgressIndicator()
                   : ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.brown,
+                          foregroundColor: Color(0xFFF8F4E1)),
                       onPressed: _verifyIdentity,
                       child: Text('Doğrulama Yap'),
                     ),

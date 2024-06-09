@@ -48,7 +48,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
     try {
       final response = await http.post(
-        Uri.parse('http://localhost:3000/user/set'),
+        Uri.parse('http://10.0.2.2:3000/user/set'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           'name': _firstName,
@@ -61,8 +61,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
       );
 
       if (response.statusCode == 201) {
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Kayıt başarılı!')));
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text('Kayıt başarılı!')));
         Navigator.of(context).pop(); // Giriş sayfasına dön
       } else {
         final errorMessage = jsonDecode(response.body)['error'] ??
@@ -88,7 +88,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
         context: context,
         builder: (context) => AlertDialog(
           title: Text('Kayıt Hatası'),
-          content: Text('Beklenmeyen bir hata oluştu. Lütfen daha sonra tekrar deneyin.'),
+          content: Text(
+              'Beklenmeyen bir hata oluştu. Lütfen daha sonra tekrar deneyin.'),
           actions: <Widget>[
             TextButton(
               onPressed: () {
@@ -207,7 +208,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 },
               ),
               TextFormField(
-                decoration: InputDecoration(labelText: 'Güvenlik Sorusu Cevabı'),
+                decoration:
+                    InputDecoration(labelText: 'Güvenlik Sorusu Cevabı'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Lütfen güvenlik sorusunun cevabını girin';
@@ -223,6 +225,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ? CircularProgressIndicator()
                   : ElevatedButton(
                       onPressed: _signUp,
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.brown,
+                          foregroundColor: Color(0xFFF8F4E1)),
                       child: Text('Üye Ol'),
                     ),
             ],
