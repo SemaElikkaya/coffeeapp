@@ -61,7 +61,7 @@ exports.login = async (req, res) => {
     const user = result.rows[0];
 
     if (user.password === password) {
-      res.status(200).json({ message: 'success', username: user.name });
+      res.status(200).json({ message: 'success', username: user.name , useremail:user.email});
     } else {
       return res.status(401).json({ error: 'Invalid credentials' });
     }

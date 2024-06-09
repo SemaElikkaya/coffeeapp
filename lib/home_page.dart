@@ -8,7 +8,9 @@ import 'components/tab_controller.dart';
 
 class HomePage extends StatefulWidget {
   final String username;
-  const HomePage({Key? key, required this.username}) : super(key: key);
+  final String useremail;
+  const HomePage({Key? key, required this.username, required this.useremail})
+      : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -32,7 +34,7 @@ class _HomePageState extends State<HomePage> {
             children: <Widget>[
               UserAccountsDrawerHeader(
                 accountName: Text(widget.username),
-                accountEmail: Text(widget.username),
+                accountEmail: Text(widget.useremail),
                 currentAccountPicture: CircleAvatar(
                   backgroundImage: AssetImage(
                       'assets/images/profile.jpg'), // Profil resmi için bir resim ekleyin
@@ -49,7 +51,8 @@ class _HomePageState extends State<HomePage> {
                     context,
                     MaterialPageRoute(
                       builder: (context) => ProfilePage(
-                        email: widget.username,
+                        username: widget.username,
+                        useremail: widget.useremail,
                       ),
                     ),
                   );
@@ -64,6 +67,7 @@ class _HomePageState extends State<HomePage> {
                       MaterialPageRoute(
                           builder: (context) => SettingsPage(
                                 username: widget.username,
+                                useremail: widget.useremail,
                               )));
                 },
               ),
@@ -117,6 +121,7 @@ class _HomePageState extends State<HomePage> {
                                 builder: (context) => CartPage(
                                   cartItems: cartItems,
                                   username: widget.username,
+                                  useremail: widget.useremail,
                                 ),
                               ),
                             );
@@ -177,6 +182,7 @@ class _HomePageState extends State<HomePage> {
           builder: (context) => CartPage(
             cartItems: cartItems,
             username: widget.username,
+            useremail: widget.useremail,
           ),
         ),
       ).then((_) {

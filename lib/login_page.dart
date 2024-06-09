@@ -50,11 +50,15 @@ class _LoginPageState extends State<LoginPage> {
 
       if (response.statusCode == 200) {
         final responseBody = jsonDecode(response.body);
-        final username = responseBody['username']; // Kullanıcı adını al
+        final username = responseBody['username'];
+        final useremail = responseBody['useremail'];
 
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
-            builder: (context) => HomePage(username: username),
+            builder: (context) => HomePage(
+              username: username,
+              useremail: useremail,
+            ),
           ),
         );
       } else {

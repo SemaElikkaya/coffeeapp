@@ -5,8 +5,11 @@ import 'home_page.dart';
 
 class SettingsPage extends StatefulWidget {
   final String username;
+  final String useremail;
 
-  const SettingsPage({Key? key, required this.username}) : super(key: key);
+  const SettingsPage(
+      {Key? key, required this.username, required this.useremail})
+      : super(key: key);
 
   @override
   _SettingsPageState createState() => _SettingsPageState();
@@ -24,7 +27,10 @@ class _SettingsPageState extends State<SettingsPage> {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (context) => HomePage(username: widget.username),
+                builder: (context) => HomePage(
+                  username: widget.username,
+                  useremail: widget.useremail,
+                ),
               ),
             );
           },
@@ -62,7 +68,10 @@ class _SettingsPageState extends State<SettingsPage> {
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => HomePage(username: widget.username),
+                      builder: (context) => HomePage(
+                        username: widget.username,
+                        useremail: widget.useremail,
+                      ),
                     ),
                   );
                 },

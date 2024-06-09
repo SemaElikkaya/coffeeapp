@@ -5,8 +5,12 @@ import 'home_page.dart';
 class CartPage extends StatefulWidget {
   final List<String> cartItems;
   final String username;
-
-  const CartPage({Key? key, required this.cartItems, required this.username})
+  final String useremail;
+  const CartPage(
+      {Key? key,
+      required this.cartItems,
+      required this.username,
+      required this.useremail})
       : super(key: key);
 
   @override
@@ -149,7 +153,9 @@ class _CartPageState extends State<CartPage> {
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) => HomePage(
-                                              username: widget.username),
+                                            username: widget.username,
+                                            useremail: widget.useremail,
+                                          ),
                                         ),
                                       );
                                     },
