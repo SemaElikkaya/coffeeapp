@@ -23,6 +23,7 @@ class PaymentPage extends StatelessWidget {
               ),
               SizedBox(height: 20),
               ElevatedButton(
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.brown),
                 onPressed: () {
                   // Ödeme işlemleri burada gerçekleştirilebilir
                   // Örneğin: Ödeme API'si çağrılır, ödeme onaylanır vs.
@@ -32,7 +33,10 @@ class PaymentPage extends StatelessWidget {
                       true); // Ödeme başarılı olduğunda true değerini döndür
                   // Navigator.popUntil(context, ModalRoute.withName('/home'));
                 },
-                child: Text('Ödemeyi Tamamla'),
+                child: Text(
+                  'Ödemeyi Tamamla',
+                  style: TextStyle(color: Color(0xFFF8F4E1)),
+                ),
               ),
             ],
           ),
