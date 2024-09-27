@@ -15,7 +15,7 @@ class _PromotionPageState extends State<PromotionPage> {
   void _incrementProgress1() {
     setState(() {
       _progressValue1 =
-          (_progressValue1 + 1) % 6; // 5 adımda bir döngüyü sağlamak için
+          (_progressValue1 + 1) % 5; // 5 adımda bir döngüyü sağlamak için
     });
   }
 
@@ -30,7 +30,7 @@ class _PromotionPageState extends State<PromotionPage> {
   void _incrementProgress2() {
     setState(() {
       _progressValue2 =
-          (_progressValue2 + 1) % 11; // 10 adımda bir döngüyü sağlamak için
+          (_progressValue2 + 1) % 10; // 10 adımda bir döngüyü sağlamak için
     });
   }
 

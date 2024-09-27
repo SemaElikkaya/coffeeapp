@@ -13,7 +13,7 @@ class _MyTabControllerState extends State<MyTabController> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 3, // Toplam tab sayısı
+      length: 3,
       child: Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false, // Geri butonunu kaldırma
@@ -27,7 +27,9 @@ class _MyTabControllerState extends State<MyTabController> {
                 buildTab('Yiyecekler')
               ],
               indicatorColor:
-                  Colors.orange, // Seçilen tab gösterge çizgisi rengi
+                  Colors.brown, // Seçilen tab gösterge çizgisi rengi
+              labelColor: Colors.brown, // Seçilen tab yazı rengi
+              unselectedLabelColor: Colors.black, // Seçilmemiş tab yazı rengi
             ),
           ),
         ),
@@ -172,6 +174,7 @@ class CoffeeItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      color: Color.fromARGB(255, 255, 255, 253),
       margin: EdgeInsets.all(8.0),
       child: Stack(
         children: [
@@ -211,8 +214,7 @@ class CoffeeItem extends StatelessWidget {
             right: 0,
             child: IconButton(
               onPressed: () {
-                onItemAddedToCart(name); // Ürünü sepete ekle
-                // Navigator.pushNamed(context, '/cart'); // Sepet sayfasına git
+                onItemAddedToCart(name);
               },
               icon: Icon(Icons.add),
             ),

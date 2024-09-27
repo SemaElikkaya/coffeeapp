@@ -1,4 +1,4 @@
-name: coffeeapp2
+name: coffeeapp
 description: "A new Flutter project."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -38,7 +38,8 @@ dependencies:
   mobile_scanner: ^3.5.5
   pretty_qr_code: ^3.0.0
   provider: ^6.0.0
-
+  http: ^0.13.3
+  
 
 dev_dependencies:
   flutter_test:

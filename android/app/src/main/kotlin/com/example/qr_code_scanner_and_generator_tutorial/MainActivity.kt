@@ -1,4 +1,4 @@
-package com.example.qr_code_scanner_and_generator_tutorial
+package com.example.coffeeapp
 
 import io.flutter.embedding.android.FlutterActivity
 
